@@ -23,13 +23,13 @@
           <hr>
       
           <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required>
+          <input type="text" placeholder="Enter Email" name="email" id="email" required>
+      
+          <label for="psw"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="username" id="username" required>
       
           <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-      
-          <label for="psw-repeat"><b>Repeat Password</b></label>
-          <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+          <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
           
           <label>
             <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
@@ -48,38 +48,39 @@
       let host = "http://localhost:8080";
       async function signUp(){
         let message = "";
-                let duckName = document.getElementById("name").value;
-                let duckType = document.getElementById("type").value;
+        let userEmail = document.getElementById("email").value;
+        let userName = document.getElementById("username").value;
+        let userPassword = document.getElementById("psw").value;
 
-                let duck = {name: duckName, type: duckType};
+        let account = {email: userEmail, username: userName, password: userPassword};
+        console.log("You entered:" + JSON.stringify(account));
 
-                console.log("You entered:" + JSON.stringify(duck));
+        let request = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(account)
+        };
 
-                let request = {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json"
-                  },
-                  body: JSON.stringify(duck)
-                };
-                let response = await fetch(host + "/ducks", request);
-                if(response.status == 200) {
-                  let id = await response.json();
-                  let result = await submitTheImage(id);
-                  if(result) {
-                      message = "success";
-                  } else {
-                      message = "Something went wrong!";
-                  }
-                } else {
-                  console.log(response);
-                  message = "Something went wrong!";
-                }
-                console.log(message);
-          }
-      </script>
+        try {
+            let response = await fetch(host + "/signup", request);
+            if(response.ok) {
+                message = "success";
+                window.location.href = "login.html";
+            } else {
+                console.log(response.statusText);
+                message = "Something went wrong!";
+            }
+        } catch(error) {
 
+            console.error("Error:", error);
+            message = "Something went wrong!";
+        }
 
-    
+        console.log(message);
+        }
+
+      </script>  
 </body>
 </html>
