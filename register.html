@@ -45,41 +45,40 @@
       </form>
 
       <script>
-      let host = "http://localhost:8080";
-      async function signUp(){
+       let host = "http://localhost:8080";
+        let menuDiv = document.getElementById(menu);
         let message = "";
-        let userEmail = document.getElementById("email").value;
-        let userName = document.getElementById("username").value;
-        let userPassword = document.getElementById("psw").value;
+        document.getElementById("registrationForm").addEventListener("submit", async function(event){
+            event.preventDefault(); 
+            
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("psw").value;
+            var username = document.getElementById("username").value;
+        
+            
+            const user = {
+                email: email,
+                username: username,
+                password: password
+            };
+            console.log(user);
 
-        let account = {email: userEmail, username: userName, password: userPassword};
-        console.log("You entered:" + JSON.stringify(account));
-
-        let request = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(account)
-        };
-
-        try {
+        
+            let request = {
+                method: POST,
+                headers: {
+                    "Content-Type": application/json
+                },
+                body: JSON.stringify(user)
+            };
             let response = await fetch(host + "/signup", request);
-            if(response.ok) {
-                message = "success";
+            if(response.status === 200) {
+                message = alert("User created successfully!");
                 window.location.href = "login.html";
             } else {
-                console.log(response.statusText);
-                message = "Something went wrong!";
+                message = alert("User creation failed!");
             }
-        } catch(error) {
-
-            console.error("Error:", error);
-            message = "Something went wrong!";
-        }
-
-        console.log(message);
-        }
+        });
 
       </script>  
 </body>
